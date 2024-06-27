@@ -9,14 +9,13 @@ import requests
 
 usage = "Usage - python3 port_scanner.py TARGET START_PORT END_PORT Threads"
 
-ban = """\n
-:::::::::   ::::::::  ::::::::: :::::::::::       ::::::::   ::::::::      :::     ::::    ::: ::::    ::: :::::::::: :::::::::  
-:+:    :+: :+:    :+: :+:    :+:    :+:          :+:    :+: :+:    :+:   :+: :+:   :+:+:   :+: :+:+:   :+: :+:        :+:    :+: 
-+:+    +:+ +:+    +:+ +:+    +:+    +:+          +:+        +:+         +:+   +:+  :+:+:+  +:+ :+:+:+  +:+ +:+        +:+    +:+ 
-+#++:++#+  +#+    +:+ +#++:++#:     +#+          +#++:++#++ +#+        +#++:++#++: +#+ +:+ +#+ +#+ +:+ +#+ +#++:++#   +#++:++#:  
-+#+        +#+    +#+ +#+    +#+    +#+                 +#+ +#+        +#+     +#+ +#+  +#+#+# +#+  +#+#+# +#+        +#+    +#+ 
-#+#        #+#    #+# #+#    #+#    #+#          #+#    #+# #+#    #+# #+#     #+# #+#   #+#+# #+#   #+#+# #+#        #+#    #+# 
-###         ########  ###    ###    ###           ########   ########  ###     ### ###    #### ###    #### ########## ###    ### \n
+ban = """
+ ______              __                                                
+|   __ \.-----.----.|  |_     .-----.----.---.-.-----.-----.-----.----.
+|    __/|  _  |   _||   _|    |__ --|  __|  _  |     |     |  -__|   _|
+|___|   |_____|__|  |____|    |_____|____|___._|__|__|__|__|_____|__|  
+                                                                                                                                            
+
 """
 cprint(ban, "light_green")
 
@@ -93,7 +92,7 @@ def scan_port():
         port = q.get()
         if port is None:
             break
-        print(f"Scanning for port {port}")
+        # print(f"Scanning for port {port}")
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(1)
@@ -142,8 +141,10 @@ while attempts < 3:
                 file.write(f"Port scan results for target: {target}\n")
                 file.write(result)
             cprint("[+] Written to file ports.txt.", "red")
+            keyboard.send("backspace")
             break
         elif keyboard.is_pressed('N') or keyboard.is_pressed('n'):
             cprint("[+] Exiting the program.", "red")
+            keyboard.send("backspace")
             sys.exit()
     break
