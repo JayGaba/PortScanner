@@ -5,6 +5,7 @@ import queue
 import threading
 from termcolor import cprint
 import keyboard
+import requests
 
 usage = "Usage - python3 port_scanner.py TARGET START_PORT END_PORT Threads"
 
@@ -75,6 +76,9 @@ print(f"Scanning target: {target}")
 
 
 def get_banner(port, s):
+    if(port == 80):
+        response = requests.get("http://" + target)
+        return response.headers['Server']
     try:
         s.settimeout(2)
         banner = s.recv(1024).decode().strip()
