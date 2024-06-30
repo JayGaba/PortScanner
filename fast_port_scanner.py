@@ -4,8 +4,8 @@ import time
 import queue
 import threading
 from termcolor import cprint
-import keyboard
 import requests
+import keyboard
 
 usage = "Usage - python3 port_scanner.py TARGET START_PORT END_PORT Threads"
 
@@ -132,19 +132,27 @@ cprint(res, "red", attrs=["blink"])
 cprint(result, "cyan")
 print(f"Time taken for scan: {end_time - start_time:.2f} seconds")
 
-attempts = 0
-while attempts < 3:
-    cprint("[+] Do you want the results to be output in a file? [Y/N]", "cyan")
-    while True:
-        if keyboard.is_pressed("Y") or keyboard.is_pressed("y"):
-            with open("ports.txt", "w") as file:
-                file.write(f"Port scan results for target: {target}\n")
-                file.write(result)
-            cprint("[+] Written to file ports.txt.", "red")
-            keyboard.send("backspace")
-            break
-        elif keyboard.is_pressed("N") or keyboard.is_pressed("n"):
-            cprint("[+] Exiting the program.", "red")
-            keyboard.send("backspace")
-            sys.exit()
-    break
+def write_to_file():
+    with open("ports.txt", "w") as file:
+        file.write(f"Port scan results for target: {target}\n")
+        file.write(result)
+    cprint("[+] Written to file ports.txt.", "red")
+
+def on_press(event):
+    global should_exit
+    if event.name.lower() == 'y':
+        write_to_file()
+        keyboard.unhook_all()  # Unhook all keyboard events
+        keyboard.send("backspace")
+        should_exit = True
+    elif event.name.lower() == 'n':
+        cprint("[+] Exiting the program.", "red")
+        keyboard.unhook_all()  # Unhook all keyboard events
+        keyboard.send("backspace")
+        should_exit = True
+
+should_exit = False
+cprint("[+] Do you want the results to be output in a file? Press 'Y' for Yes or 'N' for No.", "cyan")
+keyboard.on_press(on_press)
+while not should_exit:
+    time.sleep(0.1)
