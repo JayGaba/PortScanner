@@ -75,9 +75,9 @@ print(f"Scanning target: {target}")
 
 
 def get_banner(port, s):
-    if(port == 80):
+    if port == 80:
         response = requests.get("http://" + target)
-        return response.headers['Server']
+        return response.headers["Server"]
     try:
         s.settimeout(2)
         banner = s.recv(1024).decode().strip()
@@ -99,7 +99,7 @@ def scan_port():
             conn = s.connect_ex((target, port))
             if not conn:
                 banner = get_banner(port, s)
-                banner = ''.join(banner.splitlines())
+                banner = "".join(banner.splitlines())
                 result += f"{port}\tOPEN\t{banner}\n"
             s.close()
         except:
@@ -136,14 +136,14 @@ attempts = 0
 while attempts < 3:
     cprint("[+] Do you want the results to be output in a file? [Y/N]", "cyan")
     while True:
-        if keyboard.is_pressed('Y') or keyboard.is_pressed('y'):
+        if keyboard.is_pressed("Y") or keyboard.is_pressed("y"):
             with open("ports.txt", "w") as file:
                 file.write(f"Port scan results for target: {target}\n")
                 file.write(result)
             cprint("[+] Written to file ports.txt.", "red")
             keyboard.send("backspace")
             break
-        elif keyboard.is_pressed('N') or keyboard.is_pressed('n'):
+        elif keyboard.is_pressed("N") or keyboard.is_pressed("n"):
             cprint("[+] Exiting the program.", "red")
             keyboard.send("backspace")
             sys.exit()
